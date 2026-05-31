@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sarra Bouden × Chanel — AI/Data Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════
+   RESET & VARIABLES
+═══════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#060606;
+  --off-white:#f0ece4;
+  --gold:#b8965a;
+  --gold-light:#d4af7a;
+  --gold-dim:rgba(184,150,90,0.15);
+  --muted:rgba(240,236,228,0.38);
+  --border:rgba(240,236,228,0.08);
+  --border-gold:rgba(184,150,90,0.28);
+  --ease-lux:cubic-bezier(0.76,0,0.24,1);
+}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--off-white);font-family:'Jost',sans-serif;font-weight:300;overflow-x:hidden}
+
+/* ═══════════════════════════════
+   CUSTOM CURSOR (desktop only)
+═══════════════════════════════ */
+.cursor{position:fixed;width:8px;height:8px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:screen;display:none}
+.cursor-ring{position:fixed;width:30px;height:30px;border:1px solid var(--border-gold);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);mix-blend-mode:screen;transition:width .25s,height .25s;display:none}
+@media(pointer:fine){.cursor,.cursor-ring{display:block}}
+
+/* ═══════════════════════════════
+   NAV
+═══════════════════════════════ */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;justify-content:space-between;align-items:center;padding:1.3rem 3.5rem;border-bottom:.5px solid var(--border);background:rgba(6,6,6,.9);backdrop-filter:blur(20px)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:.92rem;font-weight:400;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+.nav-links{display:flex;gap:2.4rem;list-style:none}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;transition:color .35s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:.5px;background:var(--gold);transition:width .4s var(--ease-lux)}
+.nav-links a:hover{color:var(--off-white)}
+.nav-links a:hover::after{width:100%}
+
+/* ═══════════════════════════════
+   HERO — text LEFT, portrait RIGHT (L'Oréal style)
+═══════════════════════════════ */
+.hero{position:relative;height:100vh;min-height:600px;overflow:hidden;border-bottom:.5px solid var(--border)}
+#hero-canvas{position:absolute;inset:0;z-index:1;pointer-events:none}
+.hero-grid{position:relative;z-index:2;display:grid;grid-template-columns:45% 55%;height:100%}
+
+/* Portrait column — LEFT, fills full height */
+.hero-portrait-col{position:relative;overflow:hidden;height:100%}
+.hero-portrait{width:100%;height:100%;object-fit:contain;object-position:center top;background:var(--black);filter:grayscale(15%) contrast(1.05);display:block;opacity:0;animation:imgFade 1.2s .4s forwards}
+/* Gradient bleeds right from portrait into text col */
+.hero-portrait-overlay{position:absolute;inset:0;background:linear-gradient(to left,var(--black) 0%,rgba(6,6,6,.4) 18%,transparent 45%),linear-gradient(to top,rgba(6,6,6,.55) 0%,transparent 28%)}
+
+/* Content column — RIGHT */
+.hero-content{display:flex;flex-direction:column;justify-content:center;padding:9rem 4rem 4rem 4rem;gap:1.8rem;position:relative;z-index:2}
+.hero-eyebrow{font-size:.56rem;letter-spacing:.38em;text-transform:uppercase;color:var(--gold);opacity:0;animation:fadeUp .9s 1s forwards}
+.hero-name{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,5.5vw,6.5rem);font-weight:300;line-height:.95;letter-spacing:-.02em;opacity:0;animation:fadeUp .9s 1.2s forwards}
+.hero-name em{font-style:italic;color:var(--gold);display:block}
+.hero-rule{width:36px;height:.5px;background:var(--gold);opacity:0;animation:fadeUp .7s 1.5s forwards}
+.hero-sub{font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);opacity:0;animation:fadeUp .9s 1.6s forwards}
+.hero-statement{max-width:360px;font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:300;font-style:italic;line-height:1.75;color:rgba(240,236,228,.75);border-left:1px solid var(--gold);padding-left:1.2rem;opacity:0;animation:fadeUp .9s 1.8s forwards}
+.hero-btns{display:flex;gap:.9rem;opacity:0;animation:fadeUp .9s 2.1s forwards}
+.hero-btn{font-size:.56rem;letter-spacing:.22em;text-transform:uppercase;text-decoration:none;padding:.75rem 1.8rem;border:.5px solid var(--border-gold);color:var(--gold);transition:all .4s var(--ease-lux)}
+.hero-btn:hover{background:var(--gold);color:var(--black)}
+.hero-btn.solid{background:var(--gold);color:var(--black);border-color:var(--gold)}
+.hero-btn.solid:hover{background:var(--gold-light)}
+.hero-scroll{position:absolute;bottom:2.5rem;right:3.5rem;z-index:2;display:flex;flex-direction:column;align-items:center;gap:.5rem;opacity:0;animation:fadeUp .8s 2.4s forwards}
+.hero-scroll span{font-size:.5rem;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);writing-mode:vertical-rl;transform:rotate(180deg)}
+.scroll-line{width:.5px;height:44px;background:linear-gradient(to bottom,var(--gold),transparent);animation:sline 2.5s infinite}
+@keyframes sline{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* ═══════════════════════════════
+   STATS
+═══════════════════════════════ */
+.stats-bar{background:rgba(184,150,90,.025);border-bottom:.5px solid var(--border)}
+.stats-grid{display:grid;grid-template-columns:repeat(6,1fr)}
+.stat-item{padding:2rem 1rem;border-right:.5px solid var(--border);text-align:center}
+.stat-item:last-child{border-right:none}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-weight:300;color:var(--gold);line-height:1;margin-bottom:.4rem;display:block}
+.stat-lbl{font-size:.55rem;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);line-height:1.55}
+
+/* ═══════════════════════════════
+   SHARED SECTION UTILS
+═══════════════════════════════ */
+.sec{padding:5.5rem 3.5rem;border-bottom:.5px solid var(--border)}
+.sec-label{font-size:.55rem;letter-spacing:.38em;text-transform:uppercase;color:var(--gold);margin-bottom:.65rem;display:block}
+.sec-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.7rem,3vw,2.6rem);font-weight:300;line-height:1.18;margin-bottom:2.8rem}
+.sec-hint{font-size:.74rem;color:var(--muted);margin-bottom:2.5rem}
+
+/* ═══════════════════════════════
+   01 HISTOIRE
+═══════════════════════════════ */
+.histoire-layout{display:grid;grid-template-columns:1fr 44%;gap:0;align-items:stretch;min-height:600px}
+/* Chapters — reveal on hover (desktop) or click (mobile via .active) */
+.histoire-chapters{padding-right:5rem;display:flex;flex-direction:column;justify-content:center}
+.chapitre{padding:2.5rem 0;border-bottom:.5px solid var(--border);cursor:pointer}
+.chapitre:first-child{padding-top:0}
+.chapitre-num{font-family:'Cormorant Garamond',serif;font-size:.62rem;font-style:italic;letter-spacing:.3em;color:rgba(184,150,90,.5);margin-bottom:.55rem;text-transform:uppercase;transition:color .45s;display:block}
+.chapitre-title{font-family:'Cormorant Garamond',serif;font-size:1.18rem;font-weight:400;line-height:1.3;color:rgba(240,236,228,.32);transition:color .45s;margin-bottom:0}
+.chapitre-text{font-size:.79rem;color:rgba(240,236,228,0);line-height:1.9;max-height:0;overflow:hidden;transition:max-height .6s var(--ease-lux),color .45s,margin .35s;pointer-events:none}
+/* Hover reveal on desktop */
+@media(hover:hover){
+  .chapitre:hover .chapitre-num{color:var(--gold)}
+  .chapitre:hover .chapitre-title{color:var(--off-white)}
+  .chapitre:hover .chapitre-text{color:rgba(240,236,228,.6);max-height:220px;margin-top:.85rem}
+}
+/* Active state */
+.chapitre.active .chapitre-num{color:var(--gold)}
+.chapitre.active .chapitre-title{color:var(--off-white)}
+.chapitre.active .chapitre-text{color:rgba(240,236,228,.6);max-height:220px;margin-top:.85rem;pointer-events:auto}
+
+/* Histoire photo — full height cover, like L'Oréal */
+.histoire-photo-col{position:relative;overflow:hidden;min-height:600px;display:flex}
+.histoire-img{width:100%;flex:1;object-fit:cover;object-position:15% 65%;filter:grayscale(10%);transition:filter .55s,transform .65s var(--ease-lux);display:block}
+.histoire-img:hover{filter:grayscale(0%);transform:scale(1.03)}
+.histoire-caption{position:absolute;bottom:1.4rem;right:1.4rem;font-size:.52rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(240,236,228,.6);background:rgba(6,6,6,.55);padding:.35rem .75rem;backdrop-filter:blur(8px)}
+
+/* ═══════════════════════════════
+   02 PLAN
+═══════════════════════════════ */
+.plan-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:.5px solid var(--border)}
+.plan-step{padding:2.6rem;border-right:.5px solid var(--border);cursor:pointer;transition:background .4s,transform .35s var(--ease-lux);position:relative;overflow:hidden}
+.plan-step:last-child{border-right:none}
+.plan-step:hover{transform:perspective(900px) rotateX(-2deg) translateZ(8px);background:rgba(184,150,90,.04)}
+.plan-step.active{background:rgba(184,150,90,.055)}
+.plan-step::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1.5px;background:linear-gradient(to right,var(--gold),transparent);transition:width .5s var(--ease-lux)}
+.plan-step.active::after{width:100%}
+.plan-num{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:300;color:var(--gold-dim);line-height:1;margin-bottom:.85rem;display:block}
+.plan-title{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--off-white);margin-bottom:.55rem}
+.plan-desc{font-size:.77rem;color:var(--muted);line-height:1.65;margin-bottom:1.4rem}
+.plan-proof{display:none;border-top:.5px solid var(--border);padding-top:1.2rem;margin-top:.5rem}
+.plan-step.active .plan-proof{display:block}
+.proof-label{font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem;display:block}
+.proof-item{font-size:.75rem;color:rgba(240,236,228,.66);line-height:1.65;padding-left:.85rem;border-left:.5px solid var(--border-gold);margin-bottom:.6rem}
+
+/* ═══════════════════════════════
+   03 MISSIONS
+═══════════════════════════════ */
+.missions-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-top:2.8rem}
+.mission-card{background:var(--black);padding:2.6rem;cursor:pointer;position:relative;transition:background .35s,transform .4s var(--ease-lux)}
+.mission-card:hover{background:rgba(240,236,228,.018);transform:perspective(1200px) translateZ(12px)}
+.mission-card.open{background:rgba(184,150,90,.04)}
+.m-num{font-family:'Cormorant Garamond',serif;font-size:4rem;font-weight:300;color:var(--gold-dim);line-height:1;margin-bottom:.75rem}
+.m-label{font-size:.5rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem}
+.m-title{font-family:'Cormorant Garamond',serif;font-size:1.28rem;font-weight:400;margin-bottom:.5rem;line-height:1.25}
+.m-teaser{font-size:.73rem;color:var(--muted)}
+.m-reveal{max-height:0;overflow:hidden;transition:max-height .5s var(--ease-lux),opacity .5s;opacity:0}
+.mission-card.open .m-reveal{max-height:340px;opacity:1}
+.m-divider{width:100%;height:.5px;background:var(--border-gold);margin:1.2rem 0}
+.tech-row{display:flex;flex-wrap:wrap;gap:.38rem;margin-bottom:.8rem}
+.tech-badge{font-size:.62rem;letter-spacing:.05em;padding:.22rem .62rem;border:.5px solid var(--border-gold);color:rgba(184,150,90,.88)}
+.m-evidence{font-size:.76rem;color:rgba(240,236,228,.56);line-height:1.7}
+.m-toggle{position:absolute;top:2.6rem;right:2rem;font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);transition:color .3s}
+.mission-card:hover .m-toggle,.mission-card.open .m-toggle{color:var(--gold)}
+
+/* ═══════════════════════════════
+   04 STACK
+═══════════════════════════════ */
+.stack-section{position:relative;overflow:hidden}
+.stack-glow{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 85% 65% at 72% 52%,rgba(184,150,90,.055) 0%,transparent 65%);animation:glowPulse 7s ease-in-out infinite alternate;z-index:0}
+@keyframes glowPulse{from{opacity:.5;transform:scale(.96)}to{opacity:1;transform:scale(1.04)}}
+.stack-inner{position:relative;z-index:1}
+.stack-layout{display:grid;grid-template-columns:1fr 1.5fr;gap:5rem;align-items:start}
+.stack-intro{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-style:italic;font-weight:300;color:rgba(240,236,228,.63);line-height:1.85;margin-bottom:1.8rem}
+.stack-note{font-size:.72rem;color:var(--muted);line-height:1.75}
+.stack-groups{display:flex;flex-direction:column;gap:1.5rem}
+.group-label{font-size:.5rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:.6rem;display:block}
+.tags{display:flex;flex-wrap:wrap;gap:.36rem}
+.tag{font-size:.66rem;padding:.22rem .7rem;border:.5px solid var(--border);color:rgba(240,236,228,.48);transition:all .32s;letter-spacing:.03em}
+.tag:hover{border-color:var(--border-gold);color:var(--gold)}
+.tag.h{border-color:var(--border-gold);color:rgba(184,150,90,.88);background:var(--gold-dim)}
+
+/* ═══════════════════════════════
+   05 PARCOURS — TIMELINE (text only)
+═══════════════════════════════ */
+.tl-wrap{position:relative;margin-top:3.5rem}
+.tl-line{position:absolute;left:180px;top:0;bottom:0;width:.5px;background:linear-gradient(to bottom,var(--border-gold),var(--border) 85%)}
+.tl-entry{display:grid;grid-template-columns:180px 1fr;padding:3.2rem 0;border-bottom:.5px solid var(--border);position:relative;opacity:0;transform:translateX(20px);transition:opacity .7s,transform .7s}
+.tl-entry.vis{opacity:1;transform:translateX(0)}
+.tl-left{padding-right:2.8rem;text-align:right;padding-top:.1rem}
+.tl-year{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:300;color:rgba(184,150,90,.22);line-height:1;display:block}
+.tl-period{font-size:.53rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-top:.3rem;display:block}
+.tl-dot{position:absolute;left:176px;top:3.5rem;width:9px;height:9px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 4px rgba(184,150,90,.12),0 0 12px rgba(184,150,90,.2)}
+.tl-right{padding-left:2.8rem}
+.tl-org{font-size:.54rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin-bottom:.38rem;display:block}
+.tl-role{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:400;margin-bottom:.8rem;line-height:1.2}
+.tl-details{display:flex;flex-direction:column;gap:.3rem}
+.tl-detail{font-size:.75rem;color:rgba(240,236,228,.48);padding-left:.85rem;border-left:.5px solid var(--border);line-height:1.65}
+
+/* ═══════════════════════════════
+   06 ENGAGEMENT — GALLERY FLIP
+═══════════════════════════════ */
+/* 4-column grid: 2 rows — all 6 cards visible */
+.gallery-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  grid-template-rows:300px 300px;
+  gap:4px;
+  margin-top:2.8rem;
+}
+/* Row 1 */
+.gallery-item:nth-child(1){grid-column:1/3;grid-row:1} /* IOT Spark — wide */
+.gallery-item:nth-child(2){grid-column:3;grid-row:1}   /* WIE Congress */
+.gallery-item:nth-child(3){grid-column:4;grid-row:1}   /* BigTech Africa */
+/* Row 2 */
+.gallery-item:nth-child(4){grid-column:1;grid-row:2}   /* IES SYP */
+.gallery-item:nth-child(5){grid-column:2;grid-row:2}   /* Malta */
+.gallery-item:nth-child(6){grid-column:3/5;grid-row:2} /* Brighten Up — wide */
+
+.gallery-item{perspective:1100px;cursor:pointer;overflow:hidden}
+.gallery-flip{width:100%;height:100%;transform-style:preserve-3d;transition:transform .8s var(--ease-lux);position:relative}
+.gallery-item:hover .gallery-flip{transform:rotateY(180deg)}
+.gallery-item.flipped .gallery-flip{transform:rotateY(180deg)}
+.gface{position:absolute;inset:0;backface-visibility:hidden;overflow:hidden}
+.gface img{width:100%;height:100%;object-fit:cover;transition:transform .65s var(--ease-lux)}
+.gface:first-child img:hover{transform:scale(1.04)}
+.gback{transform:rotateY(180deg);background:rgba(6,6,6,.95)}
+.gback img{opacity:.6;filter:grayscale(20%)}
+.gfront-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(6,6,6,.88) 0%,rgba(6,6,6,.08) 55%,transparent 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:1.5rem}
+.gback-overlay{position:absolute;inset:0;background:rgba(6,6,6,.72);display:flex;flex-direction:column;justify-content:center;padding:1.8rem}
+.g-event-label{font-size:.5rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:.45rem;display:block}
+.g-event-title{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:400;line-height:1.3;color:var(--off-white)}
+.g-event-desc{font-size:.72rem;color:rgba(240,236,228,.7);line-height:1.75;margin-top:.75rem}
+.g-hint{position:absolute;top:1rem;right:1rem;font-size:.48rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(184,150,90,.6)}
+
+/* ═══════════════════════════════
+   07 POURQUOI MOI
+═══════════════════════════════ */
+.pourquoi-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-top:2.8rem}
+.raison{background:var(--black);padding:2.6rem;transition:background .4s}
+.raison:hover{background:rgba(184,150,90,.03)}
+.r-num{font-family:'Cormorant Garamond',serif;font-size:3.6rem;font-weight:300;color:var(--gold-dim);line-height:1;margin-bottom:.8rem;display:block}
+.r-title{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--off-white);margin-bottom:.72rem;font-weight:400}
+.r-text{font-size:.78rem;color:rgba(240,236,228,.56);line-height:1.85}
+.r-accent{color:rgba(184,150,90,.92);font-style:italic}
+
+/* ═══════════════════════════════
+   CTA
+═══════════════════════════════ */
+.cta-section{padding:6.5rem 3.5rem;text-align:center;position:relative;overflow:hidden}
+.cta-section::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:650px;height:650px;border-radius:50%;background:radial-gradient(circle,rgba(184,150,90,.045) 0%,transparent 65%);pointer-events:none;animation:ctaGlow 5s ease-in-out infinite alternate}
+@keyframes ctaGlow{from{transform:translate(-50%,-50%) scale(.9);opacity:.5}to{transform:translate(-50%,-50%) scale(1.1);opacity:1}}
+.cta-eyebrow{font-size:.54rem;letter-spacing:.38em;text-transform:uppercase;color:var(--gold);margin-bottom:1.6rem;display:block}
+.cta-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.9rem,4.2vw,3.5rem);font-weight:300;margin-bottom:.55rem;line-height:1.15;position:relative;z-index:1}
+.cta-sub{font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:3rem;position:relative;z-index:1}
+.cta-btns{display:flex;gap:.9rem;justify-content:center;flex-wrap:wrap;position:relative;z-index:1}
+.btn{display:inline-block;text-decoration:none;font-size:.58rem;letter-spacing:.24em;text-transform:uppercase;padding:.85rem 2.2rem;transition:all .4s var(--ease-lux);font-family:'Jost',sans-serif;font-weight:400}
+.btn-gold{background:var(--gold);color:var(--black);border:1px solid var(--gold)}
+.btn-gold:hover{background:var(--gold-light)}
+.btn-outline{background:transparent;color:var(--off-white);border:.5px solid var(--border)}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ═══════════════════════════════
+   FOOTER
+═══════════════════════════════ */
+footer{padding:1.8rem 3.5rem;border-top:.5px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+footer p{font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.footer-sig{font-family:'Cormorant Garamond',serif;font-size:.92rem;color:var(--gold);letter-spacing:.1em}
+
+/* ═══════════════════════════════
+   REVEAL
+═══════════════════════════════ */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .75s var(--ease-lux),transform .75s var(--ease-lux)}
+.reveal.vis{opacity:1;transform:translateY(0)}
+
+/* ═══════════════════════════════
+   KEYFRAMES
+═══════════════════════════════ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes imgFade{from{opacity:0}to{opacity:1}}
+
+/* ═══════════════════════════════
+   RESPONSIVE — TABLET (≤1024px)
+═══════════════════════════════ */
+@media(max-width:1024px){
+  .histoire-layout{grid-template-columns:1fr;min-height:auto}
+  .histoire-chapters{padding-right:0;padding-bottom:0}
+  .histoire-photo-col{position:relative;min-height:360px;overflow:hidden}
+  .histoire-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .stack-layout{grid-template-columns:1fr;gap:2.8rem}
+  .gallery-grid{grid-template-columns:1fr 1fr;grid-template-rows:220px 220px 220px}
+  .gallery-item:nth-child(1){grid-column:1/3;grid-row:1}
+  .gallery-item:nth-child(2){grid-column:1;grid-row:2}
+  .gallery-item:nth-child(3){grid-column:2;grid-row:2}
+  .gallery-item:nth-child(4){grid-column:1;grid-row:3}
+  .gallery-item:nth-child(5){grid-column:2;grid-row:3}
+  .gallery-item:nth-child(6){grid-column:1/3;grid-row:4}
+}
+
+/* ═══════════════════════════════
+   RESPONSIVE — MOBILE (≤768px)
+═══════════════════════════════ */
+@media(max-width:768px){
+  nav{padding:1.1rem 1.4rem}
+  .nav-links{display:none}
+  .sec{padding:3.5rem 1.4rem}
+
+  /* Hero: portrait top (right col), text bottom (left col) on mobile */
+  .hero{height:auto;min-height:100vh}
+  .hero-grid{grid-template-columns:1fr;grid-template-rows:50vh auto}
+  /* Portrait is now 2nd column — on mobile reorder via order */
+  .hero-content{order:2;padding:2.5rem 1.4rem 4rem;gap:1.4rem}
+  .hero-portrait-col{order:1;height:50vh}
+  .hero-portrait-overlay{background:linear-gradient(to bottom,transparent 55%,var(--black) 100%)}
+  .hero-scroll{right:1.4rem;bottom:1rem}
+
+  .stats-grid{grid-template-columns:repeat(3,1fr)}
+  .stat-item:nth-child(3){border-right:none}
+
+  /* Chapters: all open on mobile */
+  .chapitre-text{color:rgba(240,236,228,.6) !important;max-height:300px !important;margin-top:.85rem !important}
+  .chapitre-title{color:var(--off-white) !important}
+  .chapitre-num{color:var(--gold) !important}
+
+  .plan-steps{grid-template-columns:1fr}
+  .plan-step{border-right:none;border-bottom:.5px solid var(--border)}
+  .plan-step:hover{transform:none}
+
+  .missions-grid{grid-template-columns:1fr}
+  .mission-card:hover{transform:none}
+
+  .tl-line{display:none}
+  .tl-dot{display:none}
+  .tl-entry{grid-template-columns:1fr;padding:2rem 0}
+  .tl-left{text-align:left;padding-right:0;margin-bottom:.65rem}
+  .tl-right{padding-left:0}
+  .tl-year{font-size:1.5rem}
+
+  .gallery-grid{grid-template-columns:1fr;grid-template-rows:none !important}
+  .gallery-item:nth-child(n){grid-column:1 !important;grid-row:auto !important;height:240px}
+  .gallery-item:hover .gallery-flip{transform:none}
+
+  .pourquoi-grid{grid-template-columns:1fr}
+  .cta-section{padding:4.5rem 1.4rem}
+  footer{flex-direction:column;gap:.75rem;text-align:center;padding:1.6rem 1.4rem}
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Sarra Bouden</div>
+  <ul class="nav-links">
+    <li><a href="#histoire">Histoire</a></li>
+    <li><a href="#plan">Plan</a></li>
+    <li><a href="#missions">Missions</a></li>
+    <li><a href="#stack">Stack</a></li>
+    <li><a href="#parcours">Parcours</a></li>
+    <li><a href="#engagement">Engagement</a></li>
+    <li><a href="#pourquoi">Pourquoi moi</a></li>
+  </ul>
+</nav>
+
+<!-- ══════════════════════════════
+     HERO
+══════════════════════════════ -->
+<section class="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-grid">
+
+    <!-- Portrait LEFT -->
+    <div class="hero-portrait-col">
+      <img src="birou IIP_03.jpg" alt="Sarra Bouden" class="hero-portrait">
+      <div class="hero-portrait-overlay"></div>
+    </div>
+
+    <!-- Content RIGHT -->
+    <div class="hero-content">
+      <span class="hero-eyebrow">Candidature · Alternance AI/Data Engineer · Data Factory · Septembre 2026</span>
+      <h1 class="hero-name">Sarra<em>Bouden</em></h1>
+      <div class="hero-rule"></div>
+      <p class="hero-sub">AI/Data Engineer &nbsp;·&nbsp; Télécom Paris MS IA &nbsp;·&nbsp; Mercedes-Benz AG</p>
+      <p class="hero-statement">Petite, je voulais devenir styliste modéliste.<br>L'obsession pour le détail est restée.<br>Le medium a changé.</p>
+      <div class="hero-btns">
+        <a href="#histoire" class="hero-btn solid">Découvrir</a>
+        <a href="https://linkedin.com/in/sarra-bouden" class="hero-btn" target="_blank">LinkedIn ↗</a>
+      </div>
+    </div>
+
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar reveal">
+  <div class="stats-grid">
+    <div class="stat-item"><span class="stat-num" data-target="94" data-suffix="%">0</span><span class="stat-lbl">Précision RAG<br>en production</span></div>
+    <div class="stat-item"><span class="stat-num" data-target="500" data-suffix="+">0</span><span class="stat-lbl">Modules techniques<br>ingérés</span></div>
+    <div class="stat-item"><span class="stat-num" data-target="28" data-suffix="">0</span><span class="stat-lbl">Tests data quality<br>automatisés</span></div>
+    <div class="stat-item"><span class="stat-num" data-target="5" data-suffix=" ans">0</span><span class="stat-lbl">Volunteering IEEE<br>&amp; formations</span></div>
+    <div class="stat-item"><span class="stat-num" data-target="10" data-suffix="">0</span><span class="stat-lbl">Projets<br>data / AI</span></div>
+    <div class="stat-item"><span class="stat-num" data-target="13" data-suffix="k+">0</span><span class="stat-lbl">Pages documentaires<br>structurées</span></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     01 · HISTOIRE
+══════════════════════════════ -->
+<section class="sec" id="histoire" style="padding-left:3.5rem;padding-right:0;padding-top:5.5rem;padding-bottom:5.5rem;overflow:hidden">
+  <span class="sec-label">01 · Histoire</span>
+  <h2 class="sec-title">Ce qui m'a conduite<br><em style="font-style:italic;color:var(--gold)">jusqu'ici.</em></h2>
+  <div class="histoire-layout">
+
+    <div class="histoire-chapters">
+      <div class="chapitre active" onclick="toggleChap(this)">
+        <span class="chapitre-num">I · L'enfance · La beauté comme obsession</span>
+        <div class="chapitre-title">Styliste modéliste, d'abord.</div>
+        <div class="chapitre-text">Petite, je dessinais des silhouettes et voulais devenir styliste modéliste. Cette obsession du détail — la précision dans la coupe, l'exigence dans la forme — elle ne m'a jamais quittée. Aujourd'hui, je conçois des architectures de données. L'exigence est exactement la même.</div>
+      </div>
+      <div class="chapitre" onclick="toggleChap(this)">
+        <span class="chapitre-num">II · ESPRIT · Le choix de la rigueur</span>
+        <div class="chapitre-title">Ingénieur, par conviction.</div>
+        <div class="chapitre-text">Cycle ingénieur double diplôme CTI/EUR-ACE à ESPRIT, Tunis. J'aurais pu choisir une filière plus accessible. J'ai choisi l'exigence — parce que c'est ce niveau-là que je vise, et parce que la rigueur n'est pas une contrainte : c'est une philosophie.</div>
+      </div>
+      <div class="chapitre" onclick="toggleChap(this)">
+        <span class="chapitre-num">III · Stuttgart · La preuve par le terrain</span>
+        <div class="chapitre-title">Production, pas académique.</div>
+        <div class="chapitre-text">6 mois de PFE chez Mercedes-Benz AG à Sindelfingen. Système RAG multi-collection pour +500 modules techniques, +13 000 pages. Précision portée à 94% sur un dataset validé par les ingénieurs. Déployé sur Azure via protocole MCP. Pas un projet d'école.</div>
+      </div>
+      <div class="chapitre" onclick="toggleChap(this)">
+        <span class="chapitre-num">IV · Paris · Chanel comme horizon</span>
+        <div class="chapitre-title">La prochaine étape, construite.</div>
+        <div class="chapitre-text">Admise au Executive Mastère Spécialisé Data &amp; Intelligence Artificielle à Télécom Paris, septembre 2026. Et Chanel : parce que la DSI Mode incarne la même obsession du détail que celle qui m'a conduite à l'ingénierie. La boucle se ferme.</div>
+      </div>
+    </div>
+
+    <!-- Photo WIE panel — full-height cover -->
+    <div class="histoire-photo-col">
+      <img src="wie2.jpg" alt="WIE Annual Congress Tunisia 3.0 — modération panel" class="histoire-img">
+      <span class="histoire-caption">WIE Annual Congress Tunisia 3.0 · Modératrice panel</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     02 · PLAN
+══════════════════════════════ -->
+<section class="sec reveal" id="plan">
+  <span class="sec-label">02 · Plan de démarrage</span>
+  <h2 class="sec-title">Structurer avant d'exécuter.<br><em style="font-style:italic;color:var(--gold)">C'est ma méthode.</em></h2>
+  <p class="sec-hint">Cliquer sur chaque phase pour voir mon expérience associée.</p>
+  <div class="plan-steps">
+    <div class="plan-step active" onclick="toggleStep(this)">
+      <span class="plan-num">01</span>
+      <div class="plan-title">État des lieux</div>
+      <div class="plan-desc">Recensement des applications, identification des fragilités et opportunités.</div>
+      <div class="plan-proof">
+        <span class="proof-label">Mon expérience</span>
+        <div class="proof-item">IEEE Présidente : audit complet de 250 membres, ressources et activités existantes avant toute décision</div>
+        <div class="proof-item">Mercedes-Benz : recensement de 5 formats documentaires (PDF, HTML, SVG, code C, Simulink) avant toute ligne de code</div>
+      </div>
+    </div>
+    <div class="plan-step" onclick="toggleStep(this)">
+      <span class="plan-num">02</span>
+      <div class="plan-title">Priorisation</div>
+      <div class="plan-desc">Construction d'un backlog hiérarchisé par valeur métier et effort.</div>
+      <div class="plan-proof">
+        <span class="proof-label">Mon expérience</span>
+        <div class="proof-item">Program Manager, Congrès National IEEE : hiérarchisation des livrables, arbitrage entre contraintes métier et faisabilité technique</div>
+        <div class="proof-item">Speaker Coordinator, BigTech Africa 2025 : gestion des contraintes en temps réel, ajustements sous pression</div>
+        <div class="proof-item">Management IEEE : pilotage de 250 membres, animation d'équipes pluridisciplinaires, reporting régulier</div>
+        <div class="proof-item">PFE Mercedes-Benz : structure et plan de travail définis en autonomie, sprints, jalons, livrables, sans cadre imposé</div>
+      </div>
+    </div>
+    <div class="plan-step" onclick="toggleStep(this)">
+      <span class="plan-num">03</span>
+      <div class="plan-title">Plan de mise en oeuvre</div>
+      <div class="plan-desc">Trajectoire par incréments, fil conducteur de l'alternance.</div>
+      <div class="plan-proof">
+        <span class="proof-label">Mon expérience</span>
+        <div class="proof-item">IEEE : roadmap 12 mois, jalons clairs, suivi budgétaire et reporting régulier</div>
+        <div class="proof-item">PFE Mercedes : déploiement par incréments, ingestion, indexation, RAG, évaluation, production</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     03 · MISSIONS
+══════════════════════════════ -->
+<section class="sec reveal" id="missions">
+  <span class="sec-label">03 · Missions principales</span>
+  <h2 class="sec-title">4 missions.<br><em style="font-style:italic;color:var(--gold)">4 preuves concrètes.</em></h2>
+  <p class="sec-hint">Cliquer sur chaque carte.</p>
+  <div class="missions-grid">
+    <div class="mission-card" onclick="toggleMission(this)">
+      <span class="m-toggle">+ Voir</span>
+      <div class="m-num">01</div><div class="m-label">Mission Chanel</div>
+      <div class="m-title">Agents AI &amp; Talk to my Data</div>
+      <div class="m-teaser">IA agentique, GenAI, RAG en production.</div>
+      <div class="m-reveal">
+        <div class="m-divider"></div>
+        <div class="tech-row"><span class="tech-badge">LangGraph</span><span class="tech-badge">Gemini 2.5 Pro</span><span class="tech-badge">RAG multi-collection</span><span class="tech-badge">ChromaDB</span><span class="tech-badge">Neo4j</span><span class="tech-badge">Azure</span><span class="tech-badge">MCP</span></div>
+        <div class="m-evidence">Système RAG multi-collection déployé en production chez Mercedes-Benz. Plus de 500 modules, routing agentique, exposition via protocole MCP sur Azure. 94% de précision.</div>
+      </div>
+    </div>
+    <div class="mission-card" onclick="toggleMission(this)">
+      <span class="m-toggle">+ Voir</span>
+      <div class="m-num">02</div><div class="m-label">Mission Chanel</div>
+      <div class="m-title">Delivery data : vues, dashboards, metrics</div>
+      <div class="m-teaser">Data Products end-to-end, data quality, orchestration.</div>
+      <div class="m-reveal">
+        <div class="m-divider"></div>
+        <div class="tech-row"><span class="tech-badge">dbt</span><span class="tech-badge">Airflow</span><span class="tech-badge">Kafka</span><span class="tech-badge">PostgreSQL</span><span class="tech-badge">DuckDB</span><span class="tech-badge">Grafana</span><span class="tech-badge">CI/CD</span></div>
+        <div class="m-evidence">Pipeline Transactions Financières : dbt 3 couches, 28 tests data quality, 2 DAGs Airflow. CDC Pipeline : PostgreSQL, Kafka, Flink, DuckDB, dbt, Grafana. Delivery structuré de bout en bout.</div>
+      </div>
+    </div>
+    <div class="mission-card" onclick="toggleMission(this)">
+      <span class="m-toggle">+ Voir</span>
+      <div class="m-num">03</div><div class="m-label">Mission Chanel</div>
+      <div class="m-title">BI &amp; Dashboards analytiques</div>
+      <div class="m-teaser">Power BI, modélisation, KPIs, vues interactives.</div>
+      <div class="m-reveal">
+        <div class="m-divider"></div>
+        <div class="tech-row"><span class="tech-badge">Power BI</span><span class="tech-badge">DAX</span><span class="tech-badge">Schéma en étoile</span><span class="tech-badge">Power Query</span></div>
+        <div class="m-evidence">Dashboard Power BI livré sur la Coupe du Monde 2022. Schéma en étoile, KPIs via mesures DAX, 4 vues interactives. Maîtrise de la chaîne : modélisation, transformation, visualisation.</div>
+      </div>
+    </div>
+    <div class="mission-card" onclick="toggleMission(this)">
+      <span class="m-toggle">+ Voir</span>
+      <div class="m-num">04</div><div class="m-label">Mission Chanel</div>
+      <div class="m-title">Refactorisation &amp; modernisation</div>
+      <div class="m-teaser">État des lieux, backlog, incréments, standards.</div>
+      <div class="m-reveal">
+        <div class="m-divider"></div>
+        <div class="tech-row"><span class="tech-badge">Data lineage</span><span class="tech-badge">Data quality</span><span class="tech-badge">Python</span><span class="tech-badge">SQL</span><span class="tech-badge">Docker</span><span class="tech-badge">Terraform</span></div>
+        <div class="m-evidence">PFE Mercedes : recensement complet, identification des fragilités (5 formats non structurés), pipeline unifié avec data lineage et contrôles de qualité. Structure identique au plan Chanel.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     04 · STACK
+══════════════════════════════ -->
+<section class="sec stack-section reveal" id="stack">
+  <div class="stack-glow"></div>
+  <div class="stack-inner">
+    <span class="sec-label">04 · Stack technique</span>
+    <h2 class="sec-title">Ce que j'apporte.</h2>
+    <div class="stack-layout">
+      <div>
+        <p class="stack-intro">Les outils au coeur des architectures data et IA modernes, construits sur des projets réels, en production.</p>
+        <p class="stack-note">Les éléments surlignés correspondent directement aux exigences du JD Chanel Data Factory.</p>
+      </div>
+      <div class="stack-groups">
+        <div><span class="group-label">IA agentique &amp; GenAI</span><div class="tags"><span class="tag h">RAG</span><span class="tag h">LangGraph</span><span class="tag h">Gemini 2.5 Pro</span><span class="tag h">MCP</span><span class="tag">LangChain</span><span class="tag">ChromaDB</span><span class="tag">Neo4j</span><span class="tag">FAISS</span><span class="tag">embeddings</span></div></div>
+        <div><span class="group-label">Data Engineering</span><div class="tags"><span class="tag h">Python</span><span class="tag h">SQL</span><span class="tag h">dbt</span><span class="tag h">Airflow</span><span class="tag">PySpark / Spark</span><span class="tag">Kafka</span><span class="tag">ETL/ELT</span><span class="tag">data quality</span><span class="tag">data lineage</span></div></div>
+        <div><span class="group-label">Cloud &amp; Infrastructure</span><div class="tags"><span class="tag h">Azure</span><span class="tag h">Azure DevOps</span><span class="tag h">Azure AI Search</span><span class="tag">GCP (BigQuery, Pub/Sub)</span><span class="tag">Docker</span><span class="tag">Terraform</span><span class="tag">CI/CD</span><span class="tag">GitHub Actions</span></div></div>
+        <div><span class="group-label">Visualisation &amp; Bases de données</span><div class="tags"><span class="tag h">Power BI</span><span class="tag">Grafana</span><span class="tag">Streamlit</span><span class="tag">PostgreSQL</span><span class="tag">BigQuery</span><span class="tag">DuckDB</span><span class="tag">ChromaDB</span><span class="tag">Neo4j</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     05 · PARCOURS
+══════════════════════════════ -->
+<section class="sec reveal" id="parcours">
+  <span class="sec-label">05 · Parcours</span>
+  <h2 class="sec-title">Une trajectoire<br><em style="font-style:italic;color:var(--gold)">construite pour ce rôle.</em></h2>
+  <div class="tl-wrap">
+    <div class="tl-line"></div>
+
+    <div class="tl-entry">
+      <div class="tl-left"><span class="tl-year">2026</span><span class="tl-period">En cours</span></div>
+      <div class="tl-dot"></div>
+      <div class="tl-right">
+        <span class="tl-org">Mercedes-Benz AG · Sindelfingen, Allemagne</span>
+        <div class="tl-role">AI/Data Engineer · Stage de fin d'études</div>
+        <div class="tl-details">
+          <div class="tl-detail">Système RAG multi-collection en production (LangGraph, Gemini 2.5 Pro, Azure, MCP)</div>
+          <div class="tl-detail">Pipeline d'ingestion multi-formats · 94% précision RAG sur 35 paires Q&amp;A validées</div>
+          <div class="tl-detail">Data lineage, data quality, conformité RGPD</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-entry">
+      <div class="tl-left"><span class="tl-year">2026</span><span class="tl-period">Admise</span></div>
+      <div class="tl-dot"></div>
+      <div class="tl-right">
+        <span class="tl-org">Télécom Paris · Paris</span>
+        <div class="tl-role">Executive Mastère Spécialisé® Data &amp; Intelligence Artificielle</div>
+        <div class="tl-details">
+          <div class="tl-detail">Admission confirmée · format alternance · RNCP Niveau 7</div>
+          <div class="tl-detail">Démarrage septembre 2026</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-entry">
+      <div class="tl-left"><span class="tl-year">2021<br>–<br>2026</span><span class="tl-period">Diplôme</span></div>
+      <div class="tl-dot"></div>
+      <div class="tl-right">
+        <span class="tl-org">ESPRIT · Tunis</span>
+        <div class="tl-role">Diplôme Ingénieur Data Science · CTI/EUR-ACE</div>
+        <div class="tl-details">
+          <div class="tl-detail">Équivalent Grande École d'Ingénieurs · accréditation internationale</div>
+          <div class="tl-detail">ML, Big Data, MLOps, DevOps · échange académique Hochschule Schmalkalden, Allemagne</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-entry">
+      <div class="tl-left"><span class="tl-year">2023<br>–<br>2024</span><span class="tl-period">Leadership</span></div>
+      <div class="tl-dot"></div>
+      <div class="tl-right">
+        <span class="tl-org">IEEE ESPRIT Student Branch</span>
+        <div class="tl-role">Présidente · IAS/IES/PES Joint Chapter</div>
+        <div class="tl-details">
+          <div class="tl-detail">Pilotage de 13 vice-présidents · 7 pôles spécialisés · 250+ membres · roadmap 12 mois</div>
+          <div class="tl-detail">Gestion budgétaire 15 000+ TND · reporting IEEE Région 8</div>
+          <div class="tl-detail">Représentation internationale : Robot Championships, Malte 2024</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     06 · ENGAGEMENT & VOLUNTEERING
+══════════════════════════════ -->
+<section class="sec reveal" id="engagement">
+  <span class="sec-label">06 · Engagement &amp; Volunteering</span>
+  <h2 class="sec-title">Au-delà du code.<br><em style="font-style:italic;color:var(--gold)">L'humain aussi.</em></h2>
+  <p class="sec-hint" style="margin-bottom:0">Survoler (desktop) ou toucher (mobile) pour découvrir.</p>
+
+  <div class="gallery-grid">
+
+    <!-- 1 — IOT Spark (large, row 1 left) -->
+    <div class="gallery-item" onclick="this.classList.toggle('flipped')">
+      <div class="gallery-flip">
+        <div class="gface">
+          <img src="469547008_122172274922109167_2305044286960175351_n.jpg" alt="IOT Spark">
+          <div class="gfront-overlay">
+            <span class="g-event-label">Conférence annuelle · ESPRIT</span>
+            <div class="g-event-title">IOT Spark · Cérémonie d'ouverture</div>
+          </div>
+          <span class="g-hint">↻</span>
+        </div>
+        <div class="gface gback">
+          <img src="469451981_122172275030109167_9176156676517876996_n.jpg" alt="IOT Spark team">
+          <div class="gback-overlay">
+            <span class="g-event-label">Event Manager · Série annuelle</span>
+            <div class="g-event-title">IOT Spark</div>
+            <div class="g-event-desc">Organisée et lancée comme event manager. La conférence est devenue une série annuelle à ESPRIT. Coordination complète : speakers, logistique, cérémonie d'ouverture et de clôture.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 — WIE Annual Congress (row 1) -->
+    <div class="gallery-item" onclick="this.classList.toggle('flipped')">
+      <div class="gallery-flip">
+        <div class="gface">
+          <img src="wie.jpg" alt="WIE Annual Congress">
+          <div class="gfront-overlay">
+            <span class="g-event-label">IEEE WIE · Tunisia 3.0</span>
+            <div class="g-event-title">WIE Annual Congress</div>
+          </div>
+          <span class="g-hint">↻</span>
+        </div>
+        <div class="gface gback">
+          <img src="wie2.jpg" alt="Panel moderation">
+          <div class="gback-overlay">
+            <span class="g-event-label">Modératrice panel · ~100 participants</span>
+            <div class="g-event-title">WIE Annual Congress Tunisia 3.0</div>
+            <div class="g-event-desc">Modération du panel principal devant ~100 participantes. Échanges avec des intervenantes internationales via visioconférence en temps réel.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 — BigTech Africa (row 1) -->
+    <div class="gallery-item" onclick="this.classList.toggle('flipped')">
+      <div class="gallery-flip">
+        <div class="gface">
+          <img src="bigtech.jpg" alt="BigTech Africa 2025">
+          <div class="gfront-overlay">
+            <span class="g-event-label">Ministère tunisien de la Technologie</span>
+            <div class="g-event-title">BigTech Africa 2025</div>
+          </div>
+          <span class="g-hint">↻</span>
+        </div>
+        <div class="gface gback">
+          <img src="bigtech.jpg" alt="BigTech Africa">
+          <div class="gback-overlay">
+            <span class="g-event-label">Speaker Coordinator · Comité d'organisation</span>
+            <div class="g-event-title">BigTech Africa 2025</div>
+            <div class="g-event-desc">Coordination des speakers pour l'événement tech majeur de Tunisie, co-organisé avec le Ministère tunisien de la Technologie. Sélection, brief et suivi des intervenants.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 — IES SYP Congress (row 2) -->
+    <div class="gallery-item" onclick="this.classList.toggle('flipped')">
+      <div class="gallery-flip">
+        <div class="gface">
+          <img src="IESSYP2.jpg" alt="IEEE IES SYP Congress">
+          <div class="gfront-overlay">
+            <span class="g-event-label">IEEE IES · Congrès international</span>
+            <div class="g-event-title">IES SYP Congress</div>
+          </div>
+          <span class="g-hint">↻</span>
+        </div>
+        <div class="gface gback">
+          <img src="iessyp.jpg" alt="Best Poster Award">
+          <div class="gback-overlay">
+            <span class="g-event-label">Best Poster Award</span>
+            <div class="g-event-title">IEEE IES SYP Congress</div>
+            <div class="g-event-desc">Best Poster Award décerné à l'IEEE ESPRIT IAS/IES/PES Joint Chapter. Présentation technique devant un jury international.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 — Malta Robot Championships (row 2) -->
+    <div class="gallery-item" onclick="this.classList.toggle('flipped')">
+      <div class="gallery-flip">
+        <div class="gface">
+          <img src="malta.jpg" alt="IEEE Robot Championships Malta">
+          <div class="gfront-overlay">
+            <span class="g-event-label">IEEE Région 8 · Malte 2024</span>
+            <div class="g-event-title">Robot Championships</div>
+          </div>
+          <span class="g-hint">↻</span>
+        </div>
+        <div class="gface gback">
+          <img src="malta.jpg" alt="Malta IEEE">
+          <div class="gback-overlay">
+            <span class="g-event-label">Représentation internationale</span>
+            <div class="g-event-title">IEEE Region 8 · Malta 2024</div>
+            <div class="g-event-desc">Représentation de l'IEEE ESPRIT Student Branch aux Robot Championships IEEE Région 8. Délégation internationale, networking et compétition inter-chapitres.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 — Brighten Up the Future (large, row 2 right) -->
+    <div class="gallery-item" onclick="this.classList.toggle('flipped')">
+      <div class="gallery-flip">
+        <div class="gface">
+          <img src="484427968_671581248556194_8665092131423734319_n.jpg" alt="Brighten Up the Future">
+          <div class="gfront-overlay">
+            <span class="g-event-label">Septembre 2023 · Maison d'enfants</span>
+            <div class="g-event-title">Brighten Up the Future 3.0</div>
+          </div>
+          <span class="g-hint">↻</span>
+        </div>
+        <div class="gface gback">
+          <img src="484552399_671581245222861_231672313162643217_n.jpg" alt="Avec les enfants">
+          <div class="gback-overlay">
+            <span class="g-event-label">Co-organisation · IEEE WIE ESPRIT &amp; ESSTHS</span>
+            <div class="g-event-title">Brighten Up the Future 3.0</div>
+            <div class="g-event-desc">Journée de workshops et d'activités adaptées aux âges dans une maison d'enfants, co-organisée avec l'IEEE ESSTHS Student Branch. Activités éducatives, jeux, moments partagés avec les enfants. Un engagement humain au-delà du technique.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     07 · POURQUOI MOI
+══════════════════════════════ -->
+<section class="sec reveal" id="pourquoi">
+  <span class="sec-label">07 · Pourquoi moi</span>
+  <h2 class="sec-title">Six raisons.<br><em style="font-style:italic;color:var(--gold)">Toutes vérifiables.</em></h2>
+  <div class="pourquoi-grid">
+    <div class="raison">
+      <span class="r-num">01</span>
+      <div class="r-title">Chanel n'est pas un choix par défaut</div>
+      <div class="r-text">Enfant, je dessinais des silhouettes et voulais devenir styliste modéliste. Cette maison a toujours incarné la même idée : <span class="r-accent">créativité et précision ne s'opposent pas, elles se réclament.</span> Postuler à Chanel, c'est fermer une boucle.</div>
+    </div>
+    <div class="raison">
+      <span class="r-num">02</span>
+      <div class="r-title">Stack exacte du JD, en production</div>
+      <div class="r-text">Python, SQL, PySpark, dbt, Azure, Power BI, RAG, LangGraph, IA agentique. Pas de projets académiques sur le CV : <span class="r-accent">des pipelines réels déployés en production,</span> Mercedes-Benz AG et plateformes personnelles construites soir et week-end pendant un stage full-time.</div>
+    </div>
+    <div class="raison">
+      <span class="r-num">03</span>
+      <div class="r-title">L'IA agentique, pas en théorie</div>
+      <div class="r-text">94% de précision RAG sur documents industriels réels chez Mercedes-Benz. LangGraph, Gemini 2.5 Pro, protocole MCP, déployé sur Azure. <span class="r-accent">En 2026, les alternants qui maîtrisent l'IA agentique à ce niveau sont une minorité.</span></div>
+    </div>
+    <div class="raison">
+      <span class="r-num">04</span>
+      <div class="r-title">Delivery data de bout en bout</div>
+      <div class="r-text">dbt 3 couches, 28 tests data quality, Airflow, Kafka, CI/CD GitHub Actions, Power BI, Grafana. <span class="r-accent">Du pipeline brut à la dashboard analytique,</span> la chaîne complète, sans dépendance.</div>
+    </div>
+    <div class="raison">
+      <span class="r-num">05</span>
+      <div class="r-title">Autonomie et initiative réelles</div>
+      <div class="r-text">PFE Mercedes structuré de A à Z en autonomie : sprints, jalons, livrables, sans cadre imposé. Financial Transactions Platform et CDC Pipeline <span class="r-accent">construits le soir et le week-end pendant un stage full-time à Stuttgart.</span></div>
+    </div>
+    <div class="raison">
+      <span class="r-num">06</span>
+      <div class="r-title">Ce site complète ma candidature</div>
+      <div class="r-text">J'ai postulé sur le portail Workday. Et j'ai aussi construit ce site parce que je suis convaincue d'être le bon profil, <span class="r-accent">et parce que l'initiative, c'est la façon dont je travaille, toujours.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section reveal" id="contact">
+  <span class="cta-eyebrow">Contact</span>
+  <h2 class="cta-title">Prête pour Chanel.<br><em style="font-style:italic">Prête pour septembre 2026.</em></h2>
+  <p class="cta-sub">sarrabouden1@gmail.com &nbsp;·&nbsp; linkedin.com/in/sarra-bouden</p>
+  <div class="cta-btns">
+    <a href="https://linkedin.com/in/sarra-bouden" class="btn btn-gold" target="_blank">LinkedIn</a>
+    <a href="https://github.com/sarahbouden" class="btn btn-outline" target="_blank">GitHub</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>Sarra Bouden · Candidature Chanel Mode · Data Factory · 2026</p>
+  <span class="footer-sig">AI/Data Engineer</span>
+</footer>
+
+<!-- THREE.JS CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ══════════════════ CURSOR ══════════════════ */
+const cur=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+(function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop)})();
+
+/* ══════════════════ THREE.JS PARTICLES ══════════════════ */
+(function initParticles(){
+  const canvas=document.getElementById('hero-canvas');
+  if(!canvas||typeof THREE==='undefined') return;
+  const hero=canvas.parentElement;
+  const W=hero.offsetWidth,H=hero.offsetHeight;
+  const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  renderer.setSize(W,H);
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(60,W/H,0.1,100);
+  camera.position.z=6;
+  const N=window.innerWidth<768?40:100;
+  const pos=new Float32Array(N*3);
+  const vel=[];
+  for(let i=0;i<N;i++){
+    pos[i*3]=(Math.random()-.5)*18;
+    pos[i*3+1]=(Math.random()-.5)*11;
+    pos[i*3+2]=(Math.random()-.5)*4;
+    vel.push({x:(Math.random()-.5)*.004,y:(Math.random()-.5)*.003});
+  }
+  const geo=new THREE.BufferGeometry();
+  geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  const mat=new THREE.PointsMaterial({size:.05,color:0xb8965a,transparent:true,opacity:.5,sizeAttenuation:true});
+  const pts=new THREE.Points(geo,mat);
+  scene.add(pts);
+  (function animate(){
+    requestAnimationFrame(animate);
+    for(let i=0;i<N;i++){
+      pos[i*3]+=vel[i].x; pos[i*3+1]+=vel[i].y;
+      if(pos[i*3]>9)pos[i*3]=-9; if(pos[i*3]<-9)pos[i*3]=9;
+      if(pos[i*3+1]>6)pos[i*3+1]=-6; if(pos[i*3+1]<-6)pos[i*3+1]=6;
+    }
+    geo.attributes.position.needsUpdate=true;
+    pts.rotation.z+=.0002;
+    renderer.render(scene,camera);
+  })();
+  window.addEventListener('resize',()=>{
+    const W2=hero.offsetWidth,H2=hero.offsetHeight;
+    renderer.setSize(W2,H2);camera.aspect=W2/H2;camera.updateProjectionMatrix();
+  });
+})();
+
+/* ══════════════════ SCROLL REVEAL ══════════════════ */
+const rvObs=new IntersectionObserver(es=>{es.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('vis'),i*55);rvObs.unobserve(e.target)}})},{threshold:.07});
+document.querySelectorAll('.reveal').forEach(el=>rvObs.observe(el));
+
+/* ══════════════════ TIMELINE ENTRIES ══════════════════ */
+const tlObs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');tlObs.unobserve(e.target)}})},{threshold:.12});
+document.querySelectorAll('.tl-entry').forEach(el=>tlObs.observe(el));
+
+/* ══════════════════ COUNTERS ══════════════════ */
+function animCounters(){document.querySelectorAll('[data-target]').forEach(el=>{const t=+el.dataset.target,s=el.dataset.suffix||'';let c=0;const step=Math.ceil(t/45);const id=setInterval(()=>{c=Math.min(c+step,t);el.textContent=c+s;if(c>=t)clearInterval(id)},28)})}
+const stBar=document.querySelector('.stats-bar');
+if(stBar){const so=new IntersectionObserver(es=>{if(es[0].isIntersecting){animCounters();so.disconnect()}},{threshold:.3});so.observe(stBar)}
+
+/* ══════════════════ HISTOIRE CHAPTERS ══════════════════ */
+function toggleChap(el){
+  // On mobile: toggle active; on desktop: CSS hover handles it, click just toggles .active
+  if(window.innerWidth<=768){
+    el.classList.toggle('active');
+  } else {
+    document.querySelectorAll('.chapitre').forEach(c=>{if(c!==el)c.classList.remove('active')});
+    el.classList.toggle('active');
+  }
+}
+// First chapitre active by default on load
+document.querySelector('.chapitre')?.classList.add('active');
+
+/* ══════════════════ PLAN STEPS ══════════════════ */
+function toggleStep(el){
+  document.querySelectorAll('.plan-step').forEach(s=>{if(s!==el)s.classList.remove('active')});
+  el.classList.toggle('active');
+}
+
+/* ══════════════════ MISSIONS ══════════════════ */
+function toggleMission(el){
+  const open=el.classList.contains('open');
+  document.querySelectorAll('.mission-card').forEach(c=>{c.classList.remove('open');c.querySelector('.m-toggle').textContent='+ Voir'});
+  if(!open){el.classList.add('open');el.querySelector('.m-toggle').textContent='– Fermer'}
+}
+
+/* ══════════════════ HISTOIRE PARALLAX ══════════════════ */
+const hImg=document.querySelector('.histoire-img');
+const hSec=document.getElementById('histoire');
+if(hImg&&hSec&&window.innerWidth>768){
+  window.addEventListener('scroll',()=>{
+    const r=hSec.getBoundingClientRect();
+    const p=Math.max(0,Math.min(1,(-r.top)/(r.height||1)));
+    hImg.style.transform=`translateY(${p*-14}px)`;
+  },{passive:true});
+}
+</script>
+</body>
+</html>
